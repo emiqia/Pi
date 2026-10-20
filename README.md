@@ -1,6 +1,6 @@
 # Pi
 
-Plataformero 2D de aventura (Godot 4, PC). Pi, un pequeño mago sin elemento propio, recorre los reinos
+Pi, un pequeño mago sin elemento propio, recorre los reinos
 copiando y mezclando elementos para derrotar al ente que posee a Euler, el dios elemental.
 
 Diseño completo en `docs/` (GDD, PDF de la idea y carta Gantt del MVP).
@@ -36,7 +36,7 @@ Pi/
 ├── reinos/
 │   ├── _plantilla/        Molde de un reino
 │   ├── 01_plantas/        Capítulo 1 (MVP): Reina de las plantas
-│   │   ├── niveles/       Prados, bosque, día lluvioso con truenos
+│   │   ├── niveles/       Prados, bosque, día lluvioso con truenos, climas, estaciones, etccc
 │   │   ├── enemigos/  jefe/  npcs/
 │   │   ├── tilesets/  fondos/  musica/
 │   │   └── dialogos/
@@ -67,5 +67,5 @@ Pi/
 - Carpetas y archivos en `snake_case`, sin tildes ni ñ (`desierto_montanas`).
 - Cada escena (`.tscn`) va junto a su script (`.gd`).
 - Los reinos se numeran para mantener el orden de la historia.
-- Animaciones como *sprite sheets* PNG (Godot no importa GIF), nombradas
+- Animaciones como *sprite sheets* PNG nombradas
   `<cosa>_<accion>.png`, p. ej. `fuego_impacto.png`, `enganchar_golpe.png`.
