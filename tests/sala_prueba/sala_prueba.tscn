@@ -1,0 +1,85 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://tests/sala_prueba/sala_prueba.gd" id="1_sala"]
+[ext_resource type="TileSet" path="res://compartido/greybox/greybox_tileset.tres" id="2_tiles"]
+[ext_resource type="PackedScene" path="res://sistemas/jugador/pi.tscn" id="3_pi"]
+[ext_resource type="Texture2D" path="res://compartido/personajes/pi/animaciones/pi_atk_burbujas.png" id="4_original"]
+[ext_resource type="Texture2D" path="res://compartido/personajes/pi/animaciones/pi_atk_burbujas_sombreado.png" id="5_sombreado"]
+[ext_resource type="Texture2D" path="res://compartido/personajes/pi/animaciones/pi_atk_burbujas_sombreado_n.png" id="6_sombreado_n"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_sombreado"]
+diffuse_texture = ExtResource("5_sombreado")
+normal_texture = ExtResource("6_sombreado_n")
+
+[sub_resource type="Gradient" id="Gradient_luz"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_luz"]
+gradient = SubResource("Gradient_luz")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="SalaPrueba" type="Node2D"]
+script = ExtResource("1_sala")
+
+[node name="Ambiente" type="CanvasModulate" parent="."]
+color = Color(0.32, 0.34, 0.46, 1)
+
+[node name="Tiles" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_tiles")
+
+[node name="Vitrina" type="Node2D" parent="."]
+
+[node name="Original" type="Sprite2D" parent="Vitrina"]
+position = Vector2(112, 320)
+texture = ExtResource("4_original")
+offset = Vector2(0, -64)
+hframes = 8
+
+[node name="Sombreado" type="Sprite2D" parent="Vitrina"]
+position = Vector2(240, 320)
+texture = SubResource("CanvasTexture_sombreado")
+offset = Vector2(0, -64)
+hframes = 8
+
+[node name="EtiquetaOriginal" type="Label" parent="Vitrina"]
+offset_left = 72.0
+offset_top = 324.0
+offset_right = 152.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 10
+text = "original"
+horizontal_alignment = 1
+
+[node name="EtiquetaSombreado" type="Label" parent="Vitrina"]
+offset_left = 200.0
+offset_top = 324.0
+offset_right = 280.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 10
+text = "sombreado + normales"
+horizontal_alignment = 1
+
+[node name="Pi" parent="." instance=ExtResource("3_pi")]
+
+[node name="Luz" type="PointLight2D" parent="."]
+color = Color(1, 0.87, 0.65, 1)
+energy = 1.4
+texture = SubResource("GradientTexture2D_luz")
+texture_scale = 1.6
+height = 40.0
+
+[node name="Ayuda" type="CanvasLayer" parent="."]
+
+[node name="Texto" type="Label" parent="Ayuda"]
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 632.0
+offset_bottom = 56.0
+theme_override_font_sizes/font_size = 12
+text = "A/D mover · Shift correr · Espacio saltar (otra vez en el aire: doble salto)
+S + Espacio: backflip · Z atacar · R reiniciar · Esc salir
+Mouse: mover la luz · L: luces sí/no"

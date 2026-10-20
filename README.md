@@ -13,7 +13,7 @@ Cada reino es una carpeta autocontenida con el mismo molde, así que sumar un re
 
 ```
 Pi/
-├── project.godot          Configuración de Godot (pixel art 480x270 escalado ×4 a 1080p)
+├── project.godot          Configuración de Godot (pixel art 640x360, pantalla completa escalada ×3 a 1080p)
 ├── autoload/              Singletons globales: estado del juego, ruta pacifista/genocida,
 │                          gestor de reinos, guardado, audio, transiciones de escena
 ├── sistemas/              Código reutilizable, no depende de ningún reino
@@ -57,6 +57,8 @@ Pi/
 ├── ui/                    menus/ (principal, pausa, game over, selector de reino, dificultad),
 │                          hud/ (vida, orbe y elemento activo), dialogo/
 ├── addons/                Plugins de Godot
+├── herramientas/           Scripts de Python para sombrear sprites de Pi y generar
+│                          sus mapas de normales (Godot ignora esta carpeta)
 ├── tests/
 ├── docs/                  GDD, Gantt, PDF
 └── builds/                Exportaciones (ignorado por Git)
