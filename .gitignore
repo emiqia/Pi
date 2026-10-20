@@ -5,3 +5,5 @@
 # Ejecutables exportados
 builds/*
 !builds/.gitkeep
+
+__pycache__/
