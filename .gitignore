@@ -1,0 +1,7 @@
+# Godot
+.godot/
+/android/
+
+# Ejecutables exportados
+builds/*
+!builds/.gitkeep
