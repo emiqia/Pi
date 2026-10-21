@@ -10,6 +10,8 @@ enum Estado { QUIETO, CAMINANDO, CORRIENDO, AGACHADO, EN_AIRE, DOBLE_SALTO, BACK
 @export var friccion := 900.0
 @export var freno_giro := 1600.0
 @export var aceleracion_aire := 380.0
+@export var velocidad_dash := 330.0
+@export var duracion_dash := 0.2
 
 @export_group("Salto")
 @export var altura_salto := 112.0
@@ -18,14 +20,14 @@ enum Estado { QUIETO, CAMINANDO, CORRIENDO, AGACHADO, EN_AIRE, DOBLE_SALTO, BACK
 @export var altura_backflip := 192.0
 @export var empuje_backflip := 140.0
 @export var bonus_salto_corriendo := 0.12
-@export var multiplicador_caida := 1.6
+@export var multiplicador_caida := 1.4
 @export var corte_salto := 0.45
-@export var velocidad_caida_max := 620.0
+@export var velocidad_caida_max := 560.0
 @export var tiempo_coyote := 0.1
 @export var tiempo_buffer := 0.12
 
 @export_group("Ataque")
-@export var suspension_ataque_aire := 0.4
+@export var suspension_ataque_aire := 0.2
 
 const DURACION_GIRO_BACKFLIP := 0.55
 const ULTIMO_CUADRO_AGACHARSE := 5
@@ -38,6 +40,8 @@ var _puede_doble_salto := false
 var _coyote := 0.0
 var _buffer := 0.0
 var _maxima_aire := 0.0
+var _queria_correr := false
+var _dash := 0.0
 var _suspension := 0.0
 var _puede_suspenderse := true
 
@@ -57,6 +61,7 @@ func _physics_process(delta: float) -> void:
 
 	_actualizar_temporizadores(delta, en_suelo)
 	_atacar()
+	_dash_carrera(direccion, en_suelo)
 	_mover_horizontal(direccion, en_suelo, delta)
 	_saltar(en_suelo)
 	_aplicar_gravedad(delta)
@@ -75,6 +80,7 @@ func _actualizar_temporizadores(delta: float, en_suelo: bool) -> void:
 		_coyote -= delta
 
 	_suspension -= delta
+	_dash = _dash - delta if en_suelo else 0.0
 
 	if Input.is_action_just_pressed("saltar"):
 		_buffer = tiempo_buffer
@@ -98,9 +104,21 @@ func _al_terminar_animacion() -> void:
 		estado = Estado.QUIETO if is_on_floor() else Estado.EN_AIRE
 
 
+func _dash_carrera(direccion: float, en_suelo: bool) -> void:
+	var quiere := en_suelo and _quiere_correr() and not Input.is_action_pressed("agacharse") and estado != Estado.ATACANDO
+	if quiere and not _queria_correr and absf(velocity.x) <= velocidad_caminar + 1.0:
+		velocity.x = signf(direccion) * velocidad_dash
+		_dash = duracion_dash
+		mirando = 1 if direccion > 0.0 else -1
+	_queria_correr = quiere
+
+
 func _mover_horizontal(direccion: float, en_suelo: bool, delta: float) -> void:
 	var agachado := en_suelo and Input.is_action_pressed("agacharse")
 	var atacando_en_suelo := en_suelo and estado == Estado.ATACANDO
+
+	if _dash > 0.0:
+		direccion = float(mirando)
 
 	var objetivo := 0.0
 	if direccion != 0.0 and not agachado and not atacando_en_suelo:
@@ -126,7 +144,7 @@ func _mover_horizontal(direccion: float, en_suelo: bool, delta: float) -> void:
 
 	velocity.x = move_toward(velocity.x, objetivo, tasa * delta)
 
-	if direccion != 0.0 and estado != Estado.BACKFLIP and estado != Estado.ATACANDO:
+	if direccion != 0.0 and estado != Estado.BACKFLIP and estado != Estado.ATACANDO and _dash <= 0.0:
 		mirando = 1 if direccion > 0.0 else -1
 
 
@@ -222,9 +240,7 @@ func _actualizar_visual(delta: float) -> void:
 				_sprite.speed_scale = 1.0
 				_cambiar_postura("agacharse")
 		_:
-			if _sprite.animation != &"saltar":
-				_sprite.speed_scale = 1.0
-				_sprite.play("saltar")
+			_animar_aire()
 
 	_etiqueta.text = "%s  %d" % [Estado.keys()[estado], absf(velocity.x)]
 
@@ -253,3 +269,15 @@ func _animar_carrera() -> void:
 
 	if _sprite.animation == &"correr":
 		_sprite.speed_scale = clampf(absf(velocity.x) / velocidad_correr, 0.6, 1.2)
+
+
+func _animar_aire() -> void:
+	_sprite.speed_scale = 1.0
+	if velocity.y < 0.0:
+		if _sprite.animation != &"saltar":
+			_sprite.play("saltar")
+	elif _sprite.animation == &"caer_inicio":
+		if not _sprite.is_playing():
+			_sprite.play("caer")
+	elif _sprite.animation != &"caer":
+		_sprite.play("caer_inicio")

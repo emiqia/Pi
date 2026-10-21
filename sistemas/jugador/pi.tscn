@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" path="res://compartido/personajes/pi/animaciones/pi_run_sombreado_n.png" id="11_correr_n"]
 [ext_resource type="Texture2D" path="res://compartido/personajes/pi/animaciones/pi_jump_sombreado.png" id="12_saltar"]
 [ext_resource type="Texture2D" path="res://compartido/personajes/pi/animaciones/pi_jump_sombreado_n.png" id="13_saltar_n"]
+[ext_resource type="Texture2D" path="res://compartido/personajes/pi/animaciones/pi_fall_sombreado.png" id="14_caer"]
+[ext_resource type="Texture2D" path="res://compartido/personajes/pi/animaciones/pi_fall_sombreado_n.png" id="15_caer_n"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cuerpo"]
 size = Vector2(24, 48)
@@ -257,6 +259,30 @@ region = Rect2(128, 0, 128, 128)
 atlas = SubResource("CanvasTexture_saltar")
 region = Rect2(256, 0, 128, 128)
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_caer"]
+diffuse_texture = ExtResource("14_caer")
+normal_texture = ExtResource("15_caer_n")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_caer_0"]
+atlas = SubResource("CanvasTexture_caer")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_caer_1"]
+atlas = SubResource("CanvasTexture_caer")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_caer_2"]
+atlas = SubResource("CanvasTexture_caer")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_caer_3"]
+atlas = SubResource("CanvasTexture_caer")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_caer_4"]
+atlas = SubResource("CanvasTexture_caer")
+region = Rect2(512, 0, 128, 128)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_pi"]
 animations = [{
 "frames": [{
@@ -455,6 +481,31 @@ animations = [{
 "loop": false,
 "name": &"saltar",
 "speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_caer_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_caer_1")
+}],
+"loop": false,
+"name": &"caer_inicio",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_caer_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_caer_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_caer_4")
+}],
+"loop": true,
+"name": &"caer",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
